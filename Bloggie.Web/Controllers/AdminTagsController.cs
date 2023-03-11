@@ -13,7 +13,7 @@ namespace Bloggie.Web.Controllers
             {
             _bloggieDbContext = bloggieDbContext;
             }
-
+        //tag ekleme get metodu
         [HttpGet]
         public IActionResult Add()
         {
@@ -37,6 +37,14 @@ namespace Bloggie.Web.Controllers
             _bloggieDbContext.Add(tag);
             _bloggieDbContext.SaveChanges();
             return View("Add");
+        }
+
+        //tagleri listeleme metodu
+        [HttpGet]
+        public IActionResult List()
+        {
+            var tags = _bloggieDbContext.Tags.ToList();
+            return View(tags);
         }
     }
 }
