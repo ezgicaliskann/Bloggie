@@ -1,6 +1,7 @@
 ﻿
 using Bloggie.Web.Controllers.Data;
 using Bloggie.Web.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bloggie.Web.Repositories
 {
@@ -21,24 +22,46 @@ namespace Bloggie.Web.Repositories
             return tag;
         }
 
-        public Task<Tag?> DeleteAsync(Guid id)
+        public async Task<Tag?> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+           var existingTag = await _bloggieDbContext.Tags.FindAsync(id);
+
+       
+
+            if (existingTag != null)
+            {
+                _bloggieDbContext.Remove(existingTag);
+                await _bloggieDbContext.SaveChangesAsync();
+
+                return existingTag;
+            }
+            return null;
         }
 
-        public Task<IEnumerable<Tag>> GetAllAsync()
+        public async Task<IEnumerable<Tag>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _bloggieDbContext.Tags.ToListAsync();
         }
 
-        public Task<Tag?> GetAsync(Guid id)
+        public async Task<Tag?> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _bloggieDbContext.Tags.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<Tag?> UpdateAsync(Tag tag)
+        public async Task<Tag?> UpdateAsync(Tag tag)
         {
-            throw new NotImplementedException();
+            var existingTag = await _bloggieDbContext.Tags.FindAsync(tag.Id);
+
+            if (existingTag != null)
+            {
+                existingTag.Name = tag.Name;
+                existingTag.DisplayName = tag.DisplayName;
+
+                await _bloggieDbContext.SaveChangesAsync();
+
+                return existingTag;
+            }
+            return null;
         }
     }
 }
