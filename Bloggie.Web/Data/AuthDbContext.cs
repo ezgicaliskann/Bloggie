@@ -84,6 +84,8 @@ namespace Bloggie.Web.Data
                     UserId = superAdminId,
                 },
             };
+
+            builder.Entity<IdentityUserRole<string>>().HasData(superAdminRoles);
         }
     }
 }
