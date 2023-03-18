@@ -1,4 +1,4 @@
-using Bloggie.Web.Controllers.Data;
+ï»¿using Bloggie.Web.Controllers.Data;
 using Bloggie.Web.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,20 +7,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//DbContext'i builder özelliklerini kullanarak çaðýralým
+//Dbcontexti builder ï¿½zelliklerini kullanarak ï¿½aï¿½ï¿½ralï¿½m
 builder.Services.AddDbContext<BloggieDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("BloggieDbConnectionString")));
 
-//Oluþturmuþ olduðumuz tag repositoryi ve itaginterface'i artýk db contexmiþçesine kullanabilmek ve classlarýmýza enjekte edebilmek için aþaðýdaki builder servisini kullanýyoruz. Artýk controllerda tagrepositoryi kullanarak DbContex eriþimini dolaylý yoldan saðlamýþ olacaðýz.
+//Oluï¿½turmuï¿½ olduï¿½umuz tag repositoryi ve itaginterface'i artï¿½k db contexmiï¿½ï¿½esine kullanabilmek ve classlarï¿½mï¿½za enjekte edebilmek iï¿½in aï¿½aï¿½ï¿½daki builder servisini kullanï¿½yoruz. Artï¿½k controllerda tagrepositoryi kullanarak DbContex eriï¿½imini dolaylï¿½ yoldan saï¿½lamï¿½ï¿½ olacaï¿½ï¿½z.
 builder.Services.AddScoped<ITagInterface, TagRepository>();
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
+
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Home/Error");
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -31,7 +36,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
